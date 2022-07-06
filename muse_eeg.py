@@ -5,6 +5,9 @@ import datetime as dt
 
 
 class MuseEEG:
+    """
+    Class museEEG is for representing and editing the muse EEG data, before analyzing it
+    """
     def __init__(self):
         self.rdata = None  # for read_data
         self.data = None  # for read_data
@@ -12,7 +15,13 @@ class MuseEEG:
         filepath = askopenfilename()  # pop up - choose a file
         self.filepath = Path(filepath)  # pathlib.Path instance
 
-    def read_data(self):  # read the file into self.data
+    def read_data(self) -> None:
+        """
+        read the file into self.data as dataframe, read only the relevant electrode_wave columns into self.rdata
+        :return: None
+        Assign self.data, self.rdata
+        """
+        # read the file into self.data
         self.data = pd.read_csv(self.filepath,  infer_datetime_format=True)  # read the data
         rdata = self.data[['TimeStamp', 'Delta_TP9', 'Delta_AF7', 'Delta_AF8', 'Delta_TP10', 'Theta_TP9', 'Theta_AF7',
                            'Theta_AF8', 'Theta_TP10', 'Alpha_TP9', 'Alpha_AF7', 'Alpha_AF8', 'Alpha_TP10', 'Beta_TP9',
@@ -20,7 +29,12 @@ class MuseEEG:
                            'Gamma_AF8', 'Gamma_TP10']].copy()  # read the relevant columns into rdata
         self.rdata = rdata  # assign rdata variable to class
 
-    def ave_sec(self):
+    def ave_sec(self) -> None:
+        """
+        Turn the rdata from data per seconds fractions to rdata per seconds. Average all column for each second
+        :return: None.
+        Assign data_per_sec
+        """
         df = self.rdata  # temporary data
         df['Time'] = pd.to_datetime(df['TimeStamp'])  # Time is a new column with time as datetime
         df['Time'] = df['Time'].dt.round(freq='S')  # round all time by seconds
@@ -28,7 +42,13 @@ class MuseEEG:
         print(calc_df)  # just for sanity check- delete row later
         self.data_per_sec = calc_df  # self.data_per_sec is the new table
 
-    def del_first_min(self, m: int = 1):  # Since the first recorded minute is not valid- delete m first minutes
+    def del_first_min(self, m: int = 1) -> None:
+        """
+        Delete the first m minutes from the dataset. Since the first minute of every recording is invalid m default as 1
+        :param m: int- number of minutes
+        :return: None
+        :Update self.data_per_second
+        """
         df = self.data_per_sec.iloc[m*60:, :]  # m*60 is the number of seconds AKA number of rows to delete
         df.reset_index()  # update the indexes
         self.data_per_sec = df  # update data_per_sec
