@@ -28,6 +28,11 @@ class MuseEEG:
         print(calc_df)  # just for sanity check- delete row later
         self.data_per_sec = calc_df  # self.data_per_sec is the new table
 
+    def del_first_min(self, m: int = 1):  # Since the first recorded minute is not valid- delete m first minutes
+        df = self.data_per_sec.iloc[m*60:, :]  # m*60 is the number of seconds AKA number of rows to delete
+        df.reset_index()  # update the indexes
+        self.data_per_sec = df  # update data_per_sec
+
 
 # checking the output
 x = MuseEEG()
