@@ -1,18 +1,7 @@
-#----------------------------------------------------------------------------
-#                              Hackathon 2022
-#            Muse-generated EEG Data Extraction and Preprocessing.
-#
-# Created By: Itai Caspit, Inbal Kuperwasser, Noga Zohar,
-#               Ben Zion Haddad, Uri Bertocchi
-#----------------------------------------------------------------------------
-
-# imports
-from subprocess import TimeoutExpired
 from muse_eeg import MuseEEG
 from basic_analysis import BasicAnalysis
 from comparative_analysis import ComparativeAnalysis
-from comparative_analysis import InputError
-from functionalities import *
+from .functionalities import *
 from pathlib import Path
 
 #from functions import call_muse_eeg
@@ -24,17 +13,37 @@ from pathlib import Path
 
 # create an MuseEEG object
 eeg = MuseEEG()
+
 # read the chosen csv file into eeg.data, and place only the relevant rows for band information into rdata
 eeg.read_data()
+
 # transform the rdata values from fractions of seconds into their average (per second). negative values into positive.
 # new data is now on eeg.data_per_sec
 eeg.ave_sec()
+
 # delete the first minute of recorded data (non-valid). Can input specified minutes instead (eeg.data_per_sec)
 #eeg.del_first_min()
+
 # transform Nan rdata values into zeroes (eeg.data_per_sec)
 eeg.na_to_zero()
+
 # create and return new directory for the result files, in the same folder as the original file
 new_path = eeg.create_dir()
+
+# save and show few basic graphs
+# show graphs of all electrodes records as function of the time (each bend in different color)
+create_graph_per_electrode(df=eeg.data, electrode_name='AF7', fig_path=Path(new_path) / 'AF7.png')
+create_graph_per_electrode(df=eeg.data, electrode_name='AF8', fig_path=Path(new_path) / 'AF8.png')
+create_graph_per_electrode(df=eeg.data, electrode_name='TP9', fig_path=Path(new_path) / 'TP9.png')
+create_graph_per_electrode(df=eeg.data, electrode_name='TP10', fig_path=Path(new_path) / 'TP10.png')
+
+# show graphs of all bend records as function of the time (each electrode in different color)
+create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Delta.png')
+create_graph_per_wave(df=eeg.data, wave_length='Alpha', fig_path=Path(new_path) / 'Alpha.png')
+create_graph_per_wave(df=eeg.data, wave_length='Beta', fig_path=Path(new_path) / 'Beta.png')
+create_graph_per_wave(df=eeg.data, wave_length='Theta', fig_path=Path(new_path) / 'Theta.png')
+create_graph_per_wave(df=eeg.data, wave_length='Gamma', fig_path=Path(new_path) / 'Gamma.png')
+
 
 # create a long-form version of the data (which is averaged per second)
 # saves data to result files under "long_form_eeg.csv"
