@@ -1,4 +1,5 @@
 from muse_eeg import MuseEEG
+from basic_analysis import BasicAnalysis
 
 # create an MuseEEG object
 eeg = MuseEEG()
@@ -18,3 +19,35 @@ eeg.na_to_zero()
 
 # create and return new directory for the result files, in the same folder as the original file
 new_path = eeg.create_dir()
+
+# create a long-form version of the data (which is averaged per second)
+# saves data to result files under "long_form_eeg.csv"
+# it is possible (but not mandated) to also input a band and/or electrode of interest
+# it is also possible to use this class for recordings with different bands and electrodes
+lf_eeg = BasicAnalysis(eeg.data_per_sec,relevant_band="Alpha",relevant_electrode="TP9")
+
+# get information regarding the duration of recording
+lf_eeg.time_info()
+
+# create a df with statistic info (mean, std, max) of every band for each second of the recording across electrodes
+# this also creates a pop-up graph of mean power [bell] vs. time [sec] for all the bands
+# saves data to result files under "statistics_powers_band.csv"
+# save graph to result file under "plot_mean_band.png"
+lf_eeg.statistics_powers()
+
+# an identical version for the electrodes rather than the bands
+lf_eeg.statistics_powers("electrode")
+
+# create a df for seconds in which a recording is above a certain threshold (mean+x*std). x is defaulted to 2
+# the threshold is calculated individually for each recording channel (i.e. band+electrode combination)
+# save df to result file under "above_threshold_power.csv"
+lf_eeg.highest_band_powers()
+
+# create a df displaying the most powerful band-electrode combination for each second
+# if argument values == False the df id returned without the values of power
+# save df to result file under "most_powerful_point.csv"
+lf_eeg.band_significance()
+
+# create a df higlighting the seconds in which the band and/or electrode specified where part of the most powerful band-electrode combo
+# # save df to result file under "relevant_peaks.csv"
+lf_eeg.specific_band_most_significant()
