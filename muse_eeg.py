@@ -98,14 +98,14 @@ if __name__ == "__main__":
     temp.ave_sec()
     temp.del_first_min()
     # temp.na_to_zero()
-    test_functions = ["test_check_Nan"]  # list of function names
+    test_functions = ["test_check_Nan", "test_empty_df"]  # list of function names
     errors = []
     for func in test_functions:
         try:
             f = getattr(tst, func) # tst.check_Nan
-            f(temp.data_per_sec)
+            f(pd.DataFrame(columns = ['Name', 'Scores', 'Questions']))
         except Exception as e:
-            errors.append(f"Failed when testing method '{func}': {e}")
+            errors.append(f"Failed when testing method '{func}'")
     if len(errors) > 0:
         print(errors)
     else:
