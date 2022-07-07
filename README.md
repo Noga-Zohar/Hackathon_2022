@@ -6,6 +6,9 @@ The Muse headband captures 7 channels of EEG data to detect brain activity and p
 
 ![Muse](https://user-images.githubusercontent.com/101252448/177865771-477d0b9a-4058-471c-9345-64fe1965b473.jpg)
 
+# In Short...
+* We decided
+
 # SET-UP
 ```
 * Having python XXX version is a requierment 
@@ -15,6 +18,11 @@ The Muse headband captures 7 channels of EEG data to detect brain activity and p
 ```
 
 # running the analysis
-```
-* The easiest way of running the analysis is using the **main.py** file
-```
+The easiest way of running the analysis is using the **main.py** file
+
+* Run main.py
+* Choose the relevant file for the analysis
+* the data will run through the class ***MuseEEG*** in **muse_eeg.py**
+* Data will be formated for the different analysis possibilities
+* A new Folder named **MuseEEG_results** will open in the original file location
+* Using the 
