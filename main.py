@@ -15,3 +15,6 @@ eeg.del_first_min()
 
 # transform Nan rdata values into zeroes (eeg.data_per_sec)
 eeg.na_to_zero()
+
+# create and return new directory for the result files, in the same folder as the original file
+new_path = eeg.create_dir()
