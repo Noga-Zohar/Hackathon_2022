@@ -48,6 +48,7 @@ Contains MuseEEG class with the following functions:
 
 # basic_analysis.py
 Contains BasicAnalysis class with the following functions:
+- new_dir - creates attribute of designated path for analysis output
 - time_info - prints the duration of the recording in secs and HH:MM:SS format
 - statistics_power - returns df of simple descriptive statistics (mean, std, max) for each wave band power in every second averaged over electrodes as well as a graph of mean power vs. time. Can also be applied to electrodes instead of waves
 - highest_band_power - returns df of wave bands' power recording that exceeded an inputted threshold calculated uniquely for each wave band*electrode combo
@@ -57,6 +58,6 @@ Contains BasicAnalysis class with the following functions:
 # comparative_analysis.py
 Contains ComparativeAnalysis class with the following functions:
 
-- new_dir
-- compare_electrodes
-- correlate_data
+- new_dir - creates attribute of designated path for analysis output
+- compare_electrodes - Compare highest band powers for pairwise comparisons of single experiments.
+- correlate_data - Calculate correlation coefficient per each band of each electrode, for pairwise comparisons of single experiments. (in progress)
