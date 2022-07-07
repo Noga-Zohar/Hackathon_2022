@@ -77,21 +77,21 @@ class BasicAnalysis():
         """
         self.path = path
 
-    def verify_data(self,electrodes,bands):
+    def verify_data(self,electrodes,bands) -> None:
         #verify that electrodes and bands given list data are the same as the ones in actual data          
         if set(electrodes) != set(self.data.index.get_level_values('electrode')):
             raise ValueError(f"The museEEG data you've entered doesn't match the bands names we expected, which are {bands}")
         if set(bands) != set(self.data.index.get_level_values('band')):
             raise ValueError(f"The museEEG data you've entered doesn't match the bands names we expected, which are {bands}")              
 
-    def verify_band(self, relevant_band):
+    def verify_band(self, relevant_band) -> None:
         #verify inputted band is a string and exists in the data
         if not isinstance(relevant_band, str):
             raise TypeError(f"We expected a string! Please pass a str band")
         elif relevant_band in set(self.data.index.get_level_values('band')) == False:
             raise ValueError(f"The band you specified, {relevant_band}, doesn't exist within the data")
     
-    def verify_electrode(self, relevant_electrode):
+    def verify_electrode(self, relevant_electrode) -> None: 
         #verify inputted electrode is a string and exists in the data
         if not isinstance(relevant_electrode, str):
             raise TypeError(f"We expected a string! Please pass a str electrode")
@@ -131,9 +131,9 @@ class BasicAnalysis():
         _ = means_plot.legend(bbox_to_anchor=(1, 1)) #correct legend location
         plt.savefig(self.path/graph_path)
         plt.show() #pop up graph
-        return df_stats, _
+        return df_stats
     
-    def highest_band_powers(self,x:Union[int, float] = 2): 
+    def highest_band_powers(self,x:Union[int, float] = 2)-> pd.DataFrame: 
         """Finds instances where the power of a band-electrode combination (e.g. a recording of a band from a certain combination) esceeded
         a certain threshold calculated from the mean and std relevant to the specific band-electrode combination throughout the entire recording.
         Can be used to examine peak amplitudes or removed outliers. 
@@ -165,7 +165,7 @@ class BasicAnalysis():
         result_df.to_csv(result_path)
         return result_df
 
-    def band_significance(self, values: bool = True):
+    def band_significance(self, values: bool = True)-> pd.DataFrame:
         """Finds the most powerful electrode-band combo for each second of recording.
         Parameters
             ----------
@@ -190,7 +190,7 @@ class BasicAnalysis():
         occurence_df.to_csv(occurence_path)
         return occurence_df
     
-    def specific_band_most_significant(self):
+    def specific_band_most_significant(self)-> pd.DataFrame:
         """Finds the occurences where a specifically inputted band and\or electrode appeared as the most powerful band and\or electrode of second.
         Relies on the method band_significance
         Returns
@@ -218,4 +218,20 @@ class BasicAnalysis():
         sliced_path = self.path/"relevant_peaks.csv"
         sliced_df.to_csv(sliced_path)
         return sliced_df
+
+
+if __name__ == "__main__":
+    import eeg_test as tst
+    test_functions = ["test_wrong_input_type","test_empty_input","test_data_becomes_lf","test_lf_one_column","test_band_wrong_input","test_stat_power_wrong_input","test_stat_power_output_columns","test_power_exists","test_power_not_exists"]  # list of function names
+    errors = []
+    for func in test_functions:
+        try:
+            f = getattr(tst, func) 
+            f()
+        except Exception as e:
+            errors.append(f"Failed when testing method '{func}'")
+    if len(errors) > 0:
+        print(errors)
+    else:
+        print("Tests pass successfully.")
 

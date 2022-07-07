@@ -1,9 +1,7 @@
 import pathlib
 from pathlib import Path
-import numpy as np
 import pandas as pd
 from tkinter.filedialog import askopenfilename
-import pytest as pt
 
 
 class MuseEEG:
@@ -16,7 +14,7 @@ class MuseEEG:
         self.rdata = None  # for read_data
         self.data = None  # for read_data
         self.data_per_sec = None  # for the ave_sec function
-        filepath = askopenfilename()  # pop up - choose a file
+        filepath = askopenfilename(title='Select muse EEG .csv file')  # pop up - choose a file
         self.filepath = Path(filepath)  # pathlib.Path instance
         self.dir = str(self.filepath.parent)
 
@@ -28,20 +26,23 @@ class MuseEEG:
         """
         # read the file into self.data
         str_path = str(self.filepath)
-        if not (str_path.endswith('.csv') == True):
+        if not (str_path.endswith('.csv') == True):  # a test to make sure this file is a csv - requested input
             raise Exception('This is no CSV file')
         self.data = pd.read_csv(self.filepath, infer_datetime_format=True)  # read the data
+
+        # c_list is a list of critical column names
         c_list = ['TimeStamp', 'Delta_TP9', 'Delta_AF7', 'Delta_AF8', 'Delta_TP10', 'Theta_TP9', 'Theta_AF7',
-                    'Theta_AF8', 'Theta_TP10', 'Alpha_TP9', 'Alpha_AF7', 'Alpha_AF8', 'Alpha_TP10', 'Beta_TP9',
-                    'Beta_AF7', 'Beta_AF8', 'Beta_TP10', 'Gamma_TP9', 'Gamma_AF7',
-                    'Gamma_AF8', 'Gamma_TP10']
-        i = 0
+                  'Theta_AF8', 'Theta_TP10', 'Alpha_TP9', 'Alpha_AF7', 'Alpha_AF8', 'Alpha_TP10', 'Beta_TP9',
+                  'Beta_AF7', 'Beta_AF8', 'Beta_TP10', 'Gamma_TP9', 'Gamma_AF7',
+                  'Gamma_AF8', 'Gamma_TP10']
+        i = 0  # counter for loop
+        # checking that all critical columns for the analysis does exist
         for col in c_list:
             if col not in self.data.columns:
                 i = +1
-        print
-        if i>0:
+        if i > 0:  # if any critical col wasn't in the dataframe raise an error
             raise Exception("some band columns do not exist")
+        # create a new dataframe with only the columns we check
         rdata = self.data[['TimeStamp', 'Delta_TP9', 'Delta_AF7', 'Delta_AF8', 'Delta_TP10', 'Theta_TP9', 'Theta_AF7',
                            'Theta_AF8', 'Theta_TP10', 'Alpha_TP9', 'Alpha_AF7', 'Alpha_AF8', 'Alpha_TP10', 'Beta_TP9',
                            'Beta_AF7', 'Beta_AF8', 'Beta_TP10', 'Gamma_TP9', 'Gamma_AF7',
@@ -77,7 +78,7 @@ class MuseEEG:
         :return: None
         :Update self.data_per_second
         """
-        if len(self.data_per_sec) < 61:
+        if len(self.data_per_sec) < 61:  # a test to make sure we don't end up with an empty list
             raise Exception('data is less than a minute long, therefore not valid')
         df = self.data_per_sec.iloc[m * 60:, :]  # m*60 is the number of seconds AKA number of rows to delete
         df.reset_index()  # update the indexes
@@ -90,7 +91,7 @@ class MuseEEG:
         """
         self.data_per_sec = self.data_per_sec.fillna(0)
 
-    def create_dir(self) ->pathlib.Path:
+    def create_dir(self) -> pathlib.Path:
         """
         creates a directory for future results in the same location as analyzed csv file. Use of self.dir
         :return: Path object, for the results directory
@@ -100,24 +101,27 @@ class MuseEEG:
         return path
 
 
-
-
 if __name__ == "__main__":
     import eeg_test as tst
+    # choose a csv file to test and apply MuseEEG class on it to create test data
     temp = MuseEEG()
     temp.read_data()
     temp.ave_sec()
     temp.del_first_min()
     temp.na_to_zero()
+
+    # create a list of functions to call from eeg_test.py
     test_functions = ["test_check_Nan", "test_empty_df"]  # list of function names
-    errors = []
+    errors = []  # Assign an empty list for keeping failed tests
+
+    # testing and output success/failed tests
     for func in test_functions:
         try:
-            f = getattr(tst, func) # tst.check_Nan
+            f = getattr(tst, func)  # tst.check_Nan
             f(temp.data_per_sec)
         except Exception as e:
             errors.append(f"Failed when testing method '{func}'")
     if len(errors) > 0:
         print(errors)
     else:
-        print("Tests pass successfully.")
+        print("Tests pass successfully")
