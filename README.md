@@ -6,13 +6,49 @@ The Muse headband captures 7 channels of EEG data to detect brain activity and p
 
 ![Muse](https://user-images.githubusercontent.com/101252448/177865771-477d0b9a-4058-471c-9345-64fe1965b473.jpg)
 
-# Functionalties
-The application is able to read the data and preprocess it (removal of nan, changing values to absolute values, averaging power per second) as well as transform it (into long form) and perform basic analysis (e.g., simple descriptive statistics and visualization, duration calculation and higlighting of specific events) on a single Muse EEG recording (mainly the absolute power recordings.
-In addition the application can also make simple comparisons between large numbers of different recordings, comparing the most powerful recording cell at each second and performing correlations (in work).
+# In Short...
+* We decided
 
-# Classes
-The application is comprised of 3 classes:
-    - MuseEEG - reads and preprocesses data (the function functionalities can use the data from this class to immediately make simple graphs)
-    - BasicAnalysis - performs several types of analysis on one recording, as well as visualization
-    - ComparativeAnalysis - compares between 2 or more recordings
+# SET-UP
+```
+* Having python XXX version is a requierment 
+* You need to have a .csv file extracted from an EEG Muse session
+* Clone the repository into your integrated development environment
+* ?
+```
 
+# running the analysis
+The easiest way of running the analysis is using the **main.py** file
+
+* Run main.py
+* Choose the relevant file for the analysis
+* the data will run through the class ***MuseEEG*** in **muse_eeg.py**
+* Data will be formated for the different analysis possibilities
+* A new Folder named **MuseEEG_results** will open in the original file location
+* Using funtionalities.py to **XXX**
+* Using basic_analysis.py to **XXX**
+* Using comparative analysis.py to **XXX**
+
+# muse_eeg.py
+Contains MuseEEG class with the following functions:
+- safaf
+- fSGAG
+- FSDFA
+
+# functionalities.py
+Contains MuseEEG class with the following functions:
+- safaf
+- fSGAG
+- FSDFA
+
+# basic_analysis.py
+Contains MuseEEG class with the following functions:
+- safaf
+- fSGAG
+- FSDFA
+
+# comparative analysis.py
+Contains MuseEEG class with the following functions:
+- safaf
+- fSGAG
+- FSDFA

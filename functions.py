@@ -1,6 +1,8 @@
+# imports
 from muse_eeg import MuseEEG
 from basic_analysis import BasicAnalysis
 from comparative_analysis import ComparativeAnalysis
+from functionalities import *
 
 import pathlib
 from pathlib import Path
@@ -18,6 +20,12 @@ import itertools
 # muse_eeg
 
 def call_muse_eeg():
+    """Call all MuseEEG methods.
+
+    Returns:
+        eeg: a MuseEEG object.
+        new_path : path to save all files into.
+    """
     # create an MuseEEG object
     eeg = MuseEEG()
     # read the chosen csv file into eeg.data, and place only the relevant rows for band information into rdata
@@ -37,6 +45,11 @@ def call_muse_eeg():
 # basic analysis
   
 def call_basic_analysis(eeg, new_path):
+    """Call all BasicAnalysis methods.
+
+    Returns:
+        lf_eeg: a BasicAnalysis object.
+    """
     # create a long-form version of the data (which is averaged per second)
     # saves data to result files under "long_form_eeg.csv"
     # it is possible (but not mandated) to also input a band and/or electrode of interest
@@ -69,6 +82,12 @@ def call_basic_analysis(eeg, new_path):
 # comparative analysis
 
 def call_compare_analysis(list, new_path):
+    """Call all ComparativeAnalysis methods.
+
+    Returns:
+        ca_eeg : outputs of the electrode_comparison method
+                and the corr_comparison method.
+    """
     # create a ComparativeAnalysis object
     ca_eeg = ComparativeAnalysis(list)
     # create new dir
@@ -80,3 +99,20 @@ def call_compare_analysis(list, new_path):
     ca_eeg.correlate_data()
     
     return ca_eeg.electrode_comparison, ca_eeg.corr_comparison
+
+# visualization
+
+def call_graphs(eeg, new_path):
+    """Call all functionalities functions and graph them.
+    """
+    # save few basic graphs
+    create_graph_per_electrode(df=eeg.data, electrode_name='AF7', fig_path=Path(new_path) / 'AF7.png')
+    create_graph_per_electrode(df=eeg.data, electrode_name='AF8', fig_path=Path(new_path) / 'AF8.png')
+    create_graph_per_electrode(df=eeg.data, electrode_name='TP9', fig_path=Path(new_path) / 'TP9.png')
+    create_graph_per_electrode(df=eeg.data, electrode_name='TP10', fig_path=Path(new_path) / 'TP10.png')
+
+    create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Delta.png')
+    create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Alpha.png')
+    create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Beta.png')
+    create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Theta.png')
+    create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Gamma.png')

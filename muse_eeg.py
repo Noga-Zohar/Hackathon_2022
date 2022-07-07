@@ -1,9 +1,7 @@
 import pathlib
 from pathlib import Path
-import numpy as np
 import pandas as pd
 from tkinter.filedialog import askopenfilename
-import pytest as pt
 
 
 class MuseEEG:
@@ -42,7 +40,6 @@ class MuseEEG:
         for col in c_list:
             if col not in self.data.columns:
                 i = +1
-        print
         if i > 0:  # if any critical col wasn't in the dataframe raise an error
             raise Exception("some band columns do not exist")
         # create a new dataframe with only the columns we check
