@@ -59,13 +59,20 @@ lf_eeg.specific_band_most_significant()
 
 # the following lines should be a list created (in a loop)
 # when the user chooses more than one experiment
-exp1 = beeg1.band_significance() # beeg = BasicAnalysis object
-exp2 = beeg2.band_significance()
-exp3 = beeg3.band_significance()
-list = [exp1, exp2, exp3]
+eeg = MuseEEG()
+eeg.read_data()
+eeg.ave_sec()
+p = eeg.create_dir()
+
+beeg = BasicAnalysis(eeg.data_per_sec)
+
+list = [beeg, beeg, beeg]
 
 # create a ComparativeAnalysis object
 ceeg = ComparativeAnalysis(list)
+
+# create new dir
+ceeg.new_dir(p)
 
 # compare highest band powers for pairwise comparisons of single experiments
 ceeg.compare_electrodes()
@@ -73,4 +80,3 @@ ceeg.compare_electrodes()
 # Calculate correlation coefficient per each band of each electrode,
 # for pairwise comparisons of single experiments
 ceeg.correlate_data()
-
