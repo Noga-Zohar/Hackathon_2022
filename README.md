@@ -25,4 +25,30 @@ The easiest way of running the analysis is using the **main.py** file
 * the data will run through the class ***MuseEEG*** in **muse_eeg.py**
 * Data will be formated for the different analysis possibilities
 * A new Folder named **MuseEEG_results** will open in the original file location
-* Using the 
+* Using funtionalities.py to **XXX**
+* Using basic_analysis.py to **XXX**
+* Using comparative analysis.py to **XXX**
+
+# muse_eeg.py
+Contains MuseEEG class with the following functions:
+- safaf
+- fSGAG
+- FSDFA
+
+# functionalities.py
+Contains MuseEEG class with the following functions:
+- safaf
+- fSGAG
+- FSDFA
+
+# basic_analysis.py
+Contains MuseEEG class with the following functions:
+- safaf
+- fSGAG
+- FSDFA
+
+# comparative analysis.py
+Contains MuseEEG class with the following functions:
+- safaf
+- fSGAG
+- FSDFA
