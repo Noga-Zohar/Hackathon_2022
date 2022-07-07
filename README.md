@@ -11,10 +11,9 @@ The Muse headband captures 7 channels of EEG data to detect brain activity and p
 
 # SET-UP
 ```
-* Having python XXX version is a requierment 
+* Having python 3.7 version is a requierment 
 * You need to have a .csv file extracted from an EEG Muse session
 * Clone the repository into your integrated development environment
-* ?
 ```
 
 # running the analysis
