@@ -42,6 +42,7 @@ def call_basic_analysis(eeg, new_path):
     # it is possible (but not mandated) to also input a band and/or electrode of interest
     # it is also possible to use this class for recordings with different bands and electrodes
     lf_eeg = BasicAnalysis(eeg.data_per_sec,relevant_band="Alpha",relevant_electrode="TP9")
+    lf_eeg.new_dir(new_path)
     # get information regarding the duration of recording
     lf_eeg.time_info()
     # create a df with statistic info (mean, std, max) of every band for each second of the recording across electrodes
@@ -62,10 +63,8 @@ def call_basic_analysis(eeg, new_path):
     # create a df higlighting the seconds in which the band and/or electrode specified where part of the most powerful band-electrode combo
     # # save df to result file under "relevant_peaks.csv"
     lf_eeg.specific_band_most_significant()
-    
-    ba_eeg = BasicAnalysis(eeg.data_per_sec) 
-    
-    return lf_eeg, ba_eeg
+        
+    return lf_eeg
 
 # comparative analysis
 
