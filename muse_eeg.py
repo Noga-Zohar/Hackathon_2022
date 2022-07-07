@@ -3,7 +3,7 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 from tkinter.filedialog import askopenfilename
-import datetime as dt
+import pytest as pt
 
 
 class MuseEEG:
@@ -27,7 +27,21 @@ class MuseEEG:
         Assign self.data, self.rdata
         """
         # read the file into self.data
+        str_path = str(self.filepath)
+        if not (str_path.endswith('.csv') == True):
+            raise Exception('This is no CSV file')
         self.data = pd.read_csv(self.filepath, infer_datetime_format=True)  # read the data
+        c_list = ['TimeStamp', 'Delta_TP9', 'Delta_AF7', 'Delta_AF8', 'Delta_TP10', 'Theta_TP9', 'Theta_AF7',
+                    'Theta_AF8', 'Theta_TP10', 'Alpha_TP9', 'Alpha_AF7', 'Alpha_AF8', 'Alpha_TP10', 'Beta_TP9',
+                    'Beta_AF7', 'Beta_AF8', 'Beta_TP10', 'Gamma_TP9', 'Gamma_AF7',
+                    'Gamma_AF8', 'Gamma_TP10']
+        i = 0
+        for col in c_list:
+            if col not in self.data.columns:
+                i = +1
+        print
+        if i>0:
+            raise Exception("some band columns do not exist")
         rdata = self.data[['TimeStamp', 'Delta_TP9', 'Delta_AF7', 'Delta_AF8', 'Delta_TP10', 'Theta_TP9', 'Theta_AF7',
                            'Theta_AF8', 'Theta_TP10', 'Alpha_TP9', 'Alpha_AF7', 'Alpha_AF8', 'Alpha_TP10', 'Beta_TP9',
                            'Beta_AF7', 'Beta_AF8', 'Beta_TP10', 'Gamma_TP9', 'Gamma_AF7',
@@ -63,6 +77,8 @@ class MuseEEG:
         :return: None
         :Update self.data_per_second
         """
+        if len(self.data_per_sec) < 61:
+            raise Exception('data is less than a minute long, therefore not valid')
         df = self.data_per_sec.iloc[m * 60:, :]  # m*60 is the number of seconds AKA number of rows to delete
         df.reset_index()  # update the indexes
         self.data_per_sec = df  # update data_per_sec
@@ -86,26 +102,22 @@ class MuseEEG:
 
 
 
-
-
-
-    # delete later if no use
-    """def el_mean(self):  
-        df = self.data_per_sec['Time']
-        df['alpha'] = df[['Alpha_TP9', 'Alpha_AF7', 'Alpha_AF8', 'Alpha_TP10']].mean(axis=1)
-        df['beta'] = df[['Beta_TP9', 'Beta_AF7', 'Beta_AF8', 'Beta_TP10']].mean(axis=1)
-        df['gamma'] = df[['Gamma_TP9', 'Gamma_AF7', 'Gamma_AF8', 'Gamma_TP10']].mean(axis=1)
-        df['delta'] = df[['Delta_TP9', 'Delta_AF7', 'Delta_AF8', 'Delta_TP10']].mean(axis=1)
-        df['theta'] = df[['Theta_TP9', 'Theta_AF7', 'Theta_AF8', 'Theta_TP10']].mean(axis=1)
-        self.band_ave = df
-        return df
-    """
-
- # checking the output
-# x = MuseEEG()
-# x.read_data()
-# data_top = x.data.head()
-# print(data_top)
-# t = x.data.dtypes
-# print(t)
-# print(x.rdata.head())
+if __name__ == "__main__":
+    import eeg_test as tst
+    temp = MuseEEG()
+    temp.read_data()
+    temp.ave_sec()
+    temp.del_first_min()
+    temp.na_to_zero()
+    test_functions = ["test_check_Nan", "test_empty_df"]  # list of function names
+    errors = []
+    for func in test_functions:
+        try:
+            f = getattr(tst, func) # tst.check_Nan
+            f(temp.data_per_sec)
+        except Exception as e:
+            errors.append(f"Failed when testing method '{func}'")
+    if len(errors) > 0:
+        print(errors)
+    else:
+        print("Tests pass successfully.")
