@@ -42,7 +42,7 @@ create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) 
 # it is also possible to use this class for recordings with different bands and electrodes
 
 lf_eeg = BasicAnalysis(eeg.data_per_sec,relevant_band="Alpha",relevant_electrode="TP9")
-
+lf_egg.new_dir(new_path)
 # get information regarding the duration of recording
 lf_eeg.time_info()
 
