@@ -25,7 +25,7 @@ The easiest way of running the analysis is using the **main.py** file
 * the data will run through the class ***MuseEEG*** in **muse_eeg.py**
 * Data will be formated for the different analysis possibilities
 * A new Folder named **MuseEEG_results** will open in the original file location
-* Using funtionalities.py to **XXX**
+* Using funtionalities.py to plot graph of different band/electrode records.
 * Using basic_analysis.py to **XXX**
 * Using comparative analysis.py to **XXX**
 
@@ -38,10 +38,9 @@ Contains MuseEEG class with the following functions:
 - create_dir - create a new directory for the results and return the path's name
 
 # functionalities.py
-Contains MuseEEG class with the following functions:
-- safaf
-- fSGAG
-- FSDFA
+- create_graph_per_electrode
+- create_graph_per_wave
+- time_correction
 
 # basic_analysis.py
 Contains MuseEEG class with the following functions:
