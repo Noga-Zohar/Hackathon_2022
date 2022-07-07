@@ -10,7 +10,7 @@ class BasicAnalysis():
     ''' 
     documentation NOT FINISHED
     '''   
-    def __init__(self, data: pd.DataFrame, relevant_band : str = None, relevant_electrode: str = None, bands: list = ["Delta","Theta","Alpha","Beta","Gamma"], electrodes : list = ["TP9","AF7","AF8","TP10"]): ##NOT FINISHED!!!
+    def __init__(self, data: pd.DataFrame, relevant_band : str = None, relevant_electrode: str = None, bands: list = ["Delta","Theta","Alpha","Beta","Gamma"], electrodes : list = ["TP9","AF7","AF8","TP10"],): ##NOT FINISHED!!!
         if not isinstance(data,pd.DataFrame):
             raise TypeError(f"The object you were trying to pass as the data is {type(data)}, but it should have been a museEEG data type")
         elif data.empty:
@@ -23,7 +23,7 @@ class BasicAnalysis():
         self.data = lf.set_index(["sec","electrode","band"])
         self.data['power'] = self.data['power'].abs()
         self.data = self.data.sort_values(by=[('sec')])
-        
+        self.path = None  # for assigning path later on
         self.verify_data(electrodes, bands)
         if relevant_band!=None:
             self.verify_band(relevant_band)
@@ -35,6 +35,14 @@ class BasicAnalysis():
         self.bands = bands
         self.electrodes = electrodes
     
+    def new_dir(self, path):
+        """
+        :param path: enter designated path for analysis output
+        :return: None
+        :Assign: self.path = path for output
+        """
+        self.path = path
+
     def verify_data(self,electrodes,bands):
         #make sure data is muse eeg data and has all the appropriate col else give error          
         if set(electrodes) != set(self.data.index.get_level_values('electrode')):
