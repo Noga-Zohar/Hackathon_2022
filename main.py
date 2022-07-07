@@ -1,6 +1,14 @@
+from subprocess import TimeoutExpired
 from muse_eeg import MuseEEG
 from basic_analysis import BasicAnalysis
 from comparative_analysis import ComparativeAnalysis
+from comparative_analysis import InputError
+from .functionalities import *
+from pathlib import Path
+
+from functions import call_muse_eeg
+from functions import call_basic_analysis
+from functions import call_compare_analysis
 
 # create an MuseEEG object
 eeg = MuseEEG()
@@ -21,6 +29,18 @@ eeg.na_to_zero()
 # create and return new directory for the result files, in the same folder as the original file
 new_path = eeg.create_dir()
 
+# save few basic graphs
+create_graph_per_electrode(df=eeg.data, electrode_name='AF7', fig_path=Path(new_path) / 'AF7.png')
+create_graph_per_electrode(df=eeg.data, electrode_name='AF8', fig_path=Path(new_path) / 'AF8.png')
+create_graph_per_electrode(df=eeg.data, electrode_name='TP9', fig_path=Path(new_path) / 'TP9.png')
+create_graph_per_electrode(df=eeg.data, electrode_name='TP10', fig_path=Path(new_path) / 'TP10.png')
+
+create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Delta.png')
+create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Alpha.png')
+create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Beta.png')
+create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Theta.png')
+create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Gamma.png')
+
 
 # create a long-form version of the data (which is averaged per second)
 # saves data to result files under "long_form_eeg.csv"
@@ -28,7 +48,7 @@ new_path = eeg.create_dir()
 # it is also possible to use this class for recordings with different bands and electrodes
 
 lf_eeg = BasicAnalysis(eeg.data_per_sec,relevant_band="Alpha",relevant_electrode="TP9")
-
+lf_egg.new_dir(new_path)
 # get information regarding the duration of recording
 lf_eeg.time_info()
 
@@ -55,22 +75,21 @@ lf_eeg.band_significance()
 # # save df to result file under "relevant_peaks.csv"
 lf_eeg.specific_band_most_significant()
 
-# comparative analysis
 
-# the following lines should be a list created (in a loop)
-# when the user chooses more than one experiment
-exp1 = beeg1.band_significance() # beeg = BasicAnalysis object
-exp2 = beeg2.band_significance()
-exp3 = beeg3.band_significance()
-list = [exp1, exp2, exp3]
+# SKELETON
+list = []
+prompt = 'How many experiments would you like to test?\n> '
+user_input = input(prompt)
 
-# create a ComparativeAnalysis object
-ceeg = ComparativeAnalysis(list)
-
-# compare highest band powers for pairwise comparisons of single experiments
-ceeg.compare_electrodes()
-
-# Calculate correlation coefficient per each band of each electrode,
-# for pairwise comparisons of single experiments
-ceeg.correlate_data()
-
+if user_input == 1:
+    eeg, new_path = call_muse_eeg()
+    call_basic_analysis(eeg, new_path)
+elif user_input >= 2:
+    for experiment in range(user_input):
+        eeg, new_path = call_muse_eeg()
+        lf_eeg, entry = call_basic_analysis(eeg, new_path)
+        list.append(entry)
+    ca_eeg = call_compare_analysis(list, new_path)
+    print(ca_eeg)
+else:
+    raise InputError('Incorrect input.')
