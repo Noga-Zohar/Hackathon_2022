@@ -4,7 +4,6 @@ from typing import Union
 import datetime
 import seaborn as sns
 import matplotlib.pyplot as plt
-from muse_eeg import MuseEEG
 
 
 class BasicAnalysis():
@@ -71,7 +70,7 @@ class BasicAnalysis():
         return self.duration
     
     def statistics_powers(self, rel_idx: str ="band"):     
-        if (x!="band") & (x!="electrode"):
+        if (rel_idx!="band") & (rel_idx!="electrode"):
             raise ValueError("The relevant index argument must be 'band' or 'electrode'")
         grouped = self.data.groupby(['sec',rel_idx])
         mean_grouped = grouped.mean().rename(columns={'power': 'mean'})
@@ -81,6 +80,7 @@ class BasicAnalysis():
         means_plot = sns.lineplot(data = df_stats.reset_index(),x='sec',y='mean',hue=rel_idx)
         _ = means_plot.legend(bbox_to_anchor=(1, 1))
         plt.show()
+        print(df_stats)
 
         return df_stats, _
     
@@ -100,6 +100,7 @@ class BasicAnalysis():
                 if passed.empty == False:
                     result_df = result_df.append(pd.Series(index=passed.index,data=(electrode+'_'+band)))
         result_df = pd.Series(result_df.index.values, index=result_df) 
+        print(result_df)
         return result_df
 
     def band_significance(self, values: bool = True):
@@ -110,6 +111,7 @@ class BasicAnalysis():
         if values == False:
             df = df.reset_index().set_index(['sec'])
             df=df.drop(columns='power')
+        print(df)
         return df
     
     def specific_band_most_significant(self):
@@ -130,25 +132,8 @@ class BasicAnalysis():
             sliced_df = df.loc[:,self.rel_electrode,self.rel_band]
             count = len(sliced_df.index)
             print(f"For {count} seconds this electrode,band combo had the most significant power, meaning for {count*100/self.duration} of the recording")
+        print(sliced_df)
         return sliced_df
-    
-"""
-df = pd.read_csv("data.csv")
-df=df[['TimeStamp', 'Delta_TP9', 'Delta_AF7', 'Delta_AF8', 'Delta_TP10', 'Theta_TP9', 'Theta_AF7', 'Theta_AF8', 'Theta_TP10', 'Alpha_TP9', 'Alpha_AF7', 'Alpha_AF8', 'Alpha_TP10', 'Beta_TP9', 'Beta_AF7', 'Beta_AF8', 'Beta_TP10', 'Gamma_TP9', 'Gamma_AF7','Gamma_AF8', 'Gamma_TP10']]
-temp = BasicAnalysis(df)
-print(temp.data)"""
-
-x = MuseEEG()
-x.read_data()
-x.ave_sec()
-
-
-temp = x.data_per_sec
-
-temp = BasicAnalysis(x.data_per_sec,"Alpha")
-df = temp.band_significance()
-print(df)
-
 
 
 

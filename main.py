@@ -12,7 +12,7 @@ eeg.read_data()
 eeg.ave_sec()
 
 # delete the first minute of recorded data (non-valid). Can input specified minutes instead (eeg.data_per_sec)
-eeg.del_first_min()
+#eeg.del_first_min()
 
 # transform Nan rdata values into zeroes (eeg.data_per_sec)
 eeg.na_to_zero()
@@ -24,6 +24,7 @@ new_path = eeg.create_dir()
 # saves data to result files under "long_form_eeg.csv"
 # it is possible (but not mandated) to also input a band and/or electrode of interest
 # it is also possible to use this class for recordings with different bands and electrodes
+
 lf_eeg = BasicAnalysis(eeg.data_per_sec,relevant_band="Alpha",relevant_electrode="TP9")
 
 # get information regarding the duration of recording
