@@ -24,6 +24,7 @@ def create_graph_per_electrode(df, electrode_name, fig_path):
     # adding Label to the x-axis
     plt.xlabel('time')
     plt.savefig(fig_path)
+    plt.show()  # pop up graph
 
 
 def create_graph_per_wave(df, wave_length, fig_path):
@@ -46,6 +47,7 @@ def create_graph_per_wave(df, wave_length, fig_path):
     # adding Label to the x-axis
     plt.xlabel('time')
     plt.savefig(fig_path)
+    plt.show()  # pop up graph
 
 
 def time_correction(df, avg_reindex_df_path=None):
