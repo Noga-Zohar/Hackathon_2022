@@ -5,6 +5,12 @@ plt.style.use('default')
 
 
 def create_graph_per_electrode(df, electrode_name, fig_path):
+    if type(df) != pd.DataFrame:
+        raise ValueError('The data frame is not from the correct type!')
+
+    if electrode_name not in ['AF7', 'AF8', 'TP9', 'TP10']:
+        raise ValueError('The name is not valid!')
+
     plt.figure(figsize=(16, 8), dpi=150)
     df['Delta_' + electrode_name].plot(label='Delta', color='orange')
     df['Theta_' + electrode_name].plot(label='Theta')
@@ -21,6 +27,13 @@ def create_graph_per_electrode(df, electrode_name, fig_path):
 
 
 def create_graph_per_wave(df, wave_length, fig_path):
+    if type(df) != pd.DataFrame:
+        raise ValueError('The data frame is not from the correct type!')
+
+    if wave_length not in ['Delta', 'Alpha', 'Beta', 'Theta', 'Gamma']:
+        raise ValueError('The name is not valid!')
+
+
     plt.figure(figsize=(16, 8), dpi=150)
     df[wave_length + "_AF7"].plot(label='AF7', color='orange')
     df[wave_length + "_AF8"].plot(label='AF8')
@@ -35,17 +48,8 @@ def create_graph_per_wave(df, wave_length, fig_path):
     plt.savefig(fig_path)
 
 
-def clean_and_create_averaged_per_second_df(df):
-    irrelevant_col = "Elements"
-    df = df.loc[:, df.columns != irrelevant_col]
-    df = df.dropna()
-    df = df.groupby('TimeStamp').mean()
-
-    return df
-
-
 def time_correction(df, avg_reindex_df_path=None):
-    df = clean_and_create_averaged_per_second_df(df=df)
+    # df = clean_and_create_averaged_per_second_df(df=df)
     df['TimeStamp'] = np.arange(1, df.shape[0] + 1)
     if avg_reindex_df_path:   # if is not "None", save the new csv file
         df.to_csv(avg_reindex_df_path)
@@ -58,3 +62,4 @@ if __name__ == '__main__':
     df = pd.read_csv(df_path)
     fig_path_save = r"C:\Users\danie\Downloads\tmp.png"
     create_graph_per_electrode(df=df, electrode_name='TP9', fig_path=fig_path_save)
+
