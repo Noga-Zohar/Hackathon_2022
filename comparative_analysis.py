@@ -26,6 +26,7 @@ class ComparativeAnalysis:
         
         # edit ending times to match between all experiments
         self.list = experiment_list
+        self.path = None  # for assigning path later on
         # find the shortest experiment time
         #time_thresh = min([len(datum.data) for datum in self.list]) #CHANGE '.DATA' LATER
         time_thresh = min([len(datum) for datum in self.list]) # DELETE LATER
@@ -33,7 +34,15 @@ class ComparativeAnalysis:
         # crop all other measurements to fit the shortest
         for datum in self.list:
             datum = datum.head(time_thresh)
-        
+
+    def new_dir(self, path):
+        """
+        :param path: enter designated path for analysis output
+        :return: None
+        :Assign: self.path = path for output
+        """
+        self.path = path
+
     # descriptive analysis
     def compare_electrodes(self):
         """Compare highest band powers for pairwise
