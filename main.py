@@ -2,9 +2,13 @@ from subprocess import TimeoutExpired
 from muse_eeg import MuseEEG
 from basic_analysis import BasicAnalysis
 from comparative_analysis import ComparativeAnalysis
-from functions import *
+from comparative_analysis import InputError
 from .functionalities import *
 from pathlib import Path
+
+from functions import call_muse_eeg
+from functions import call_basic_analysis
+from functions import call_compare_analysis
 
 # create an MuseEEG object
 eeg = MuseEEG()
@@ -88,4 +92,4 @@ elif user_input >= 2:
     ca_eeg = call_compare_analysis(list, new_path)
     print(ca_eeg)
 else:
-    #some kind of error
+    raise InputError('Incorrect input.')
