@@ -4,7 +4,6 @@ from typing import Union
 import datetime
 import seaborn as sns
 import matplotlib.pyplot as plt
-from muse_eeg import MuseEEG
 
 
 class BasicAnalysis():
@@ -125,11 +124,13 @@ class BasicAnalysis():
         std_grouped = grouped.std().rename(columns={'power': 'std'}) #std series
         max_grouped = grouped.max().rename(columns={'power': 'max'}) #max series
         df_stats = mean_grouped.join(std_grouped).join(max_grouped) #join the three serieses into a df
+        stats_path = "statistics_powers_"+rel_idx+".csv"
+        df_stats.to_csv(self.path/stats_path)
+        graph_path = 'graph_means_'+rel_idx+'.png'
         means_plot = sns.lineplot(data = df_stats.reset_index(),x='sec',y='mean',hue=rel_idx) #create graph of means vs. time
         _ = means_plot.legend(bbox_to_anchor=(1, 1)) #correct legend location
-        plt.savefig('graph_means_'+rel_idx+'.png')
+        plt.savefig(self.path/graph_path)
         plt.show() #pop up graph
-        df_stats.to_csv("statistics_powers_"+rel_idx+".csv")
         return df_stats, _
     
     def highest_band_powers(self,x:Union[int, float] = 2): 
@@ -160,7 +161,8 @@ class BasicAnalysis():
                 if passed.empty == False: #if such occurences exist add them to result_df with the data being the combined name
                     result_df = result_df.append(pd.Series(index=passed.index,data=(electrode+'_'+band)))
         result_df = pd.Series(result_df.index.values, index=result_df) #switch data and index of result_df so that the data is the seconds
-        result_df.to_csv("above_threshold_power.csv")
+        result_path = self.path/"above_threshold_power.csv"
+        result_df.to_csv(result_path)
         return result_df
 
     def band_significance(self, values: bool = True):
@@ -184,7 +186,8 @@ class BasicAnalysis():
         if values == False: #a unique case where the data is the band rather than the values
             occurence_df = occurence_df.reset_index().set_index(['sec','electrode'])
             occurence_df=occurence_df.drop(columns='power') #delete the values col
-        occurence_df.to_csv("most_powerful_point.csv")
+        occurence_path = self.path/"most_powerful_point.csv"
+        occurence_df.to_csv(occurence_path)
         return occurence_df
     
     def specific_band_most_significant(self):
@@ -212,5 +215,7 @@ class BasicAnalysis():
             sliced_df = df.loc[:,self.rel_electrode,self.rel_band]
             count = len(sliced_df.index)
             print(f"For {count} seconds this electrode,band combo had the most significant power, meaning for {count*100/self.duration} of the recording")
-        sliced_df.to_csv("relevant_peaks.csv")
+        sliced_path = self.path/"relevant_peaks.csv"
+        sliced_df.to_csv(sliced_path)
         return sliced_df
+
