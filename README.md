@@ -7,7 +7,12 @@ The Muse headband captures 7 channels of EEG data to detect brain activity and p
 ![Muse](https://user-images.githubusercontent.com/101252448/177865771-477d0b9a-4058-471c-9345-64fe1965b473.jpg)
 
 # In Short...
-* We decided
+* As there are several (very comprehensive tools for processing raw EEG data, we decided to handle the data Muse creats for the power of each wave band in each electrode.
+* We created 3 classes that feed of each other (MuseEEg -> BasicAnalysis -> ComparativeAnalsys) though we tried to allow for some flexibility in that. 
+* As we are unsure what researchers might wish to do with the data we aimed to allow multiple analysis possibilities (mainitaing the raw data, averaging per second, long form presentation and several other preprocessing steps that can be discarded if not needed).
+* We tried to create many basic analysis and graphing possibilities so that a focused researcher will be able to choose the option that suits their needs and expand on it
+* We gathered that the relevant PIs lab might wish to compare within-person Muse recording in the future and began building a few different descriptive and statisitc tools. This is still in progress.
+* We skimmed the surface with code testing. This is also still in progress.
 
 # SET-UP
 ```
@@ -25,7 +30,7 @@ The easiest way of running the analysis is using the **main.py** file
 * Data will be formated for the different analysis possibilities
 * A new Folder named **MuseEEG_results** will open in the original file location
 * Using funtionalities.py to plot graph of different band/electrode records.
-* Using basic_analysis.py to **XXX**
+* Using basic_analysis.py to transform the data (into long form) and perform basic analysis (e.g., simple descriptive statistics and visualization, duration calculation and higlighting of specific events) on a single Muse EEG recording
 * Using comparative_analysis.py to compare data from multiple experiments/measurements.
 
 # muse_eeg.py
@@ -43,12 +48,15 @@ Contains MuseEEG class with the following functions:
 
 # basic_analysis.py
 Contains BasicAnalysis class with the following functions:
-- safaf
-- fSGAG
-- FSDFA
+- time_info - prints the duration of the recording in secs and HH:MM:SS format
+- statistics_power - returns df of simple descriptive statistics (mean, std, max) for each wave band power in every second averaged over electrodes as well as a graph of mean power vs. time. Can also be applied to electrodes instead of waves
+- highest_band_power - returns df of wave bands' power recording that exceeded an inputted threshold calculated uniquely for each wave band*electrode combo
+- band_significance - returns the most powerful band*electrode combo for each second
+- specific_band_most_significant - returns the seconds during which a specific band and\or electrode appeared in band_significance, as well as calculating the commonality of that occurence
 
 # comparative_analysis.py
 Contains ComparativeAnalysis class with the following functions:
+
 - new_dir
 - compare_electrodes
 - correlate_data
