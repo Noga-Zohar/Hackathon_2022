@@ -4,6 +4,13 @@ from comparative_analysis import ComparativeAnalysis
 from .functionalities import *
 from pathlib import Path
 
+#from functions import call_muse_eeg
+#from functions import call_basic_analysis
+#from functions import call_compare_analysis
+#from functions import call_graphs
+
+# main script
+
 # create an MuseEEG object
 eeg = MuseEEG()
 
@@ -72,10 +79,10 @@ create_graph_per_electrode(df=eeg.data, electrode_name='TP9', fig_path=Path(new_
 create_graph_per_electrode(df=eeg.data, electrode_name='TP10', fig_path=Path(new_path) / 'TP10.png')
 
 create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Delta.png')
-create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Alpha.png')
-create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Beta.png')
-create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Theta.png')
-create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Gamma.png')
+create_graph_per_wave(df=eeg.data, wave_length='Alpha', fig_path=Path(new_path) / 'Alpha.png')
+create_graph_per_wave(df=eeg.data, wave_length='Beta', fig_path=Path(new_path) / 'Beta.png')
+create_graph_per_wave(df=eeg.data, wave_length='Theta', fig_path=Path(new_path) / 'Theta.png')
+create_graph_per_wave(df=eeg.data, wave_length='Gamma', fig_path=Path(new_path) / 'Gamma.png')
 
 
 # list for testing ComparativeAnalysis
@@ -89,7 +96,7 @@ ca_eeg.new_dir(new_path)
 ca_eeg.compare_electrodes()
 # Calculate correlation coefficient per each band of each electrode,
 # for pairwise comparisons of single experiments
-ca_eeg.correlate_data()
+#ca_eeg.correlate_data() #this is not yet operational (midnight problems), but the underlying code can be seen in ComparativeAnalysis
 
 # ---------------------------------------------------------------------
 
