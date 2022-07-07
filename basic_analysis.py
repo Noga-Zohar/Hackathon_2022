@@ -1,7 +1,8 @@
 import numpy as np
 import pandas as pd
 import datetime
-import pandas_bokeh
+import seaborn as sns
+import matplotlib.pyplot as plt
 from muse_eeg import MuseEEG
 
 
@@ -66,8 +67,11 @@ class BasicAnalysis():
         std_grouped = grouped.std().rename(columns={'power': 'std'})
         max_grouped = grouped.max().rename(columns={'power': 'max'})
         df_stats = mean_grouped.join(std_grouped).join(max_grouped)
-        _ = df_stats['mean'].plot_bokeh()
-        return _, df_stats
+        means_plot = sns.lineplot(data = df_stats.reset_index(),x='sec',y='mean',hue=x)
+        _ = means_plot.legend(bbox_to_anchor=(1, 1))
+        plt.show()
+
+        return df_stats, _
     
     def highest_band_powers(self,x:int = 2): 
         #return a df with band-electrode power values that were more than 2 standard deviations above the average for that band-electrode
