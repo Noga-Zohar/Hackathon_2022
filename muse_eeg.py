@@ -51,10 +51,7 @@ class MuseEEG:
             'Theta_AF8', 'Theta_TP10', 'Alpha_TP9', 'Alpha_AF7', 'Alpha_AF8', 'Alpha_TP10', 'Beta_TP9',
             'Beta_AF7', 'Beta_AF8', 'Beta_TP10', 'Gamma_TP9', 'Gamma_AF7',
             'Gamma_AF8', 'Gamma_TP10']] = dff
-        print(dff)
-        print(dff['Gamma_TP9'])
         calc_df = df.groupby('Time').mean()  # group all columns by the same time (seconds accuracy), new val is mean
-        print(calc_df)  # just for sanity check- delete row later
         self.data_per_sec = calc_df  # self.data_per_sec is the new table
 
     def del_first_min(self, m: int = 1) -> None:
@@ -83,10 +80,10 @@ class MuseEEG:
 
 
 # checking the output
-x = MuseEEG()
-x.read_data()
-data_top = x.data.head()
-print(data_top)
-t = x.data.dtypes
-print(t)
-print(x.rdata.head())
+# x = MuseEEG()
+# x.read_data()
+# data_top = x.data.head()
+# print(data_top)
+# t = x.data.dtypes
+# print(t)
+# print(x.rdata.head())
