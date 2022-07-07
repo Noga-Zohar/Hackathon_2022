@@ -1,7 +1,9 @@
 import numpy as np
 import pandas as pd
 import datetime
+import pandas_bokeh
 from muse_eeg import MuseEEG
+
 
 class BasicAnalysis():
     ''' 
@@ -64,7 +66,8 @@ class BasicAnalysis():
         std_grouped = grouped.std().rename(columns={'power': 'std'})
         max_grouped = grouped.max().rename(columns={'power': 'max'})
         df_stats = mean_grouped.join(std_grouped).join(max_grouped)
-        return df_stats
+        _ = df_stats['mean'].plot_bokeh()
+        return _, df_stats
     
     def highest_band_powers(self,x:int = 2): 
         #return a df with band-electrode power values that were more than 2 standard deviations above the average for that band-electrode
@@ -124,7 +127,7 @@ x.ave_sec()
 temp = x.data_per_sec
 
 temp = BasicAnalysis(x.data_per_sec,"Alpha")
-df = temp.band_significance()
+df = temp.statistics_powers()
 print(df)
 
 
