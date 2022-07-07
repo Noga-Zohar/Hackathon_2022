@@ -8,7 +8,7 @@ The Muse headband captures 7 channels of EEG data to detect brain activity and p
 
 # In Short...
 * As there are several (very comprehensive tools for processing raw EEG data, we decided to handle the data Muse creats for the power of each wave band in each electrode.
-* We created 3 classes that feed of each other (MuseEEg -> BasicAnalysis -> ComparativeAnalsys) though we tried to allow for some flexibility in that. 
+* We created 3 classes that feed of each other (MuseEEG -> BasicAnalysis -> ComparativeAnalysis) though we tried to allow for some flexibility in that. 
 * As we are unsure what researchers might wish to do with the data we aimed to allow multiple analysis possibilities (mainitaing the raw data, averaging per second, long form presentation and several other preprocessing steps that can be discarded if not needed).
 * We tried to create many basic analysis and graphing possibilities so that a focused researcher will be able to choose the option that suits their needs and expand on it
 * We gathered that the relevant PIs lab might wish to compare within-person Muse recording in the future and began building a few different descriptive and statisitc tools. This is still in progress.
