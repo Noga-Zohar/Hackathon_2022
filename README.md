@@ -31,9 +31,11 @@ The easiest way of running the analysis is using the **main.py** file
 
 # muse_eeg.py
 Contains MuseEEG class with the following functions:
-- safaf
-- fSGAG
-- FSDFA
+- read_data - read the csv into dataframe
+- ave_sec - turn data into data per second
+- del_first_min - delete the first minute of recording (not valid by definition)
+- na_to_zero - turn nan to 0
+- create_dir - create a new directory for the results and return the path's name
 
 # functionalities.py
 - create_graph_per_electrode
