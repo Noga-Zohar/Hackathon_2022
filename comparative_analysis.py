@@ -19,7 +19,7 @@ class ComparativeAnalysis:
     
     """
     
-    def __init__(self, experiment_list):
+    def __init__(self, experiment_list, path):
         ######################################################
         # PUT TESTING TO CHECK MORE THAN ONE ELEMENT IN LIST #
         ######################################################
