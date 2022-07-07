@@ -219,19 +219,19 @@ class BasicAnalysis():
         sliced_df.to_csv(sliced_path)
         return sliced_df
 
-"""
+
 if __name__ == "__main__":
     import eeg_test as tst
-    test_functions = ["test_check_Nan", "test_empty_df"]  # list of function names
+    test_functions = ["test_wrong_input_type","test_empty_input","test_data_becomes_lf","test_lf_one_column","test_band_wrong_input","test_stat_power_wrong_input","test_stat_power_output_columns","test_power_exists","test_power_not_exists"]  # list of function names
     errors = []
     for func in test_functions:
         try:
-            f = getattr(tst, func) # tst.check_Nan
-            f(temp.data_per_sec)
+            f = getattr(tst, func) 
+            f()
         except Exception as e:
             errors.append(f"Failed when testing method '{func}'")
     if len(errors) > 0:
         print(errors)
     else:
         print("Tests pass successfully.")
-        """
+
