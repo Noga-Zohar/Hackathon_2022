@@ -1,3 +1,4 @@
+import pathlib
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -66,10 +67,30 @@ class MuseEEG:
         df.reset_index()  # update the indexes
         self.data_per_sec = df  # update data_per_sec
 
-    def na_to_zero(self):
+    def na_to_zero(self) -> None:
+        """
+        turning NaN vals in dataframe into 0
+        :return:
+        """
         self.data_per_sec = self.data_per_sec.fillna(0)
 
-    def el_mean(self):
+    def create_dir(self) ->pathlib.Path:
+        """
+        creates a directory for future results in the same location as analyzed csv file. Use of self.dir
+        :return: Path object, for the results directory
+        """
+        path = Path(self.dir + '/MuseEEG_results/')
+        path.mkdir(parents=True, exist_ok=True)
+        return path
+
+
+
+
+
+
+
+    # delete later if no use
+    """def el_mean(self):  
         df = self.data_per_sec['Time']
         df['alpha'] = df[['Alpha_TP9', 'Alpha_AF7', 'Alpha_AF8', 'Alpha_TP10']].mean(axis=1)
         df['beta'] = df[['Beta_TP9', 'Beta_AF7', 'Beta_AF8', 'Beta_TP10']].mean(axis=1)
@@ -78,12 +99,7 @@ class MuseEEG:
         df['theta'] = df[['Theta_TP9', 'Theta_AF7', 'Theta_AF8', 'Theta_TP10']].mean(axis=1)
         self.band_ave = df
         return df
-
-    def create_dir(self):
-        path = Path(self.dir + '/MuseEEG_results/')
-        path.mkdir(parents=True, exist_ok=True)
-        return path
-
+    """
 
  # checking the output
 # x = MuseEEG()
