@@ -1,5 +1,6 @@
 from muse_eeg import MuseEEG
 from basic_analysis import BasicAnalysis
+from comparative_analysis import ComparativeAnalysis
 
 # create an MuseEEG object
 eeg = MuseEEG()
@@ -19,6 +20,7 @@ eeg.na_to_zero()
 
 # create and return new directory for the result files, in the same folder as the original file
 new_path = eeg.create_dir()
+
 
 # create a long-form version of the data (which is averaged per second)
 # saves data to result files under "long_form_eeg.csv"
@@ -52,3 +54,23 @@ lf_eeg.band_significance()
 # create a df higlighting the seconds in which the band and/or electrode specified where part of the most powerful band-electrode combo
 # # save df to result file under "relevant_peaks.csv"
 lf_eeg.specific_band_most_significant()
+
+# comparative analysis
+
+# the following lines should be a list created (in a loop)
+# when the user chooses more than one experiment
+exp1 = beeg1.band_significance() # beeg = BasicAnalysis object
+exp2 = beeg2.band_significance()
+exp3 = beeg3.band_significance()
+list = [exp1, exp2, exp3]
+
+# create a ComparativeAnalysis object
+ceeg = ComparativeAnalysis(list)
+
+# compare highest band powers for pairwise comparisons of single experiments
+ceeg.compare_electrodes()
+
+# Calculate correlation coefficient per each band of each electrode,
+# for pairwise comparisons of single experiments
+ceeg.correlate_data()
+
