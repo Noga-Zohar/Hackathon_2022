@@ -1,6 +1,8 @@
+from subprocess import TimeoutExpired
 from muse_eeg import MuseEEG
 from basic_analysis import BasicAnalysis
 from comparative_analysis import ComparativeAnalysis
+from functions import *
 
 # create an MuseEEG object
 eeg = MuseEEG()
@@ -55,28 +57,21 @@ lf_eeg.band_significance()
 # # save df to result file under "relevant_peaks.csv"
 lf_eeg.specific_band_most_significant()
 
-# comparative analysis
 
-# the following lines should be a list created (in a loop)
-# when the user chooses more than one experiment
-eeg = MuseEEG()
-eeg.read_data()
-eeg.ave_sec()
-p = eeg.create_dir()
+# SKELETON
+list = []
+prompt = 'How many experiments would you like to test?\n> '
+user_input = input(prompt)
 
-beeg = BasicAnalysis(eeg.data_per_sec)
-
-list = [beeg, beeg, beeg]
-
-# create a ComparativeAnalysis object
-ceeg = ComparativeAnalysis(list)
-
-# create new dir
-ceeg.new_dir(p)
-
-# compare highest band powers for pairwise comparisons of single experiments
-ceeg.compare_electrodes()
-
-# Calculate correlation coefficient per each band of each electrode,
-# for pairwise comparisons of single experiments
-ceeg.correlate_data()
+if user_input == 1:
+    eeg, new_path = call_muse_eeg()
+    call_basic_analysis(eeg, new_path)
+elif user_input >= 2:
+    for experiment in range(user_input):
+        eeg, new_path = call_muse_eeg()
+        lf_eeg, entry = call_basic_analysis(eeg, new_path)
+        list.append(entry)
+    ca_eeg = call_compare_analysis(list, new_path)
+    print(ca_eeg)
+else:
+    #some kind of error
