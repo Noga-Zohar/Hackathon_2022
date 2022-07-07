@@ -23,17 +23,19 @@ eeg.na_to_zero()
 # create and return new directory for the result files, in the same folder as the original file
 new_path = eeg.create_dir()
 
-# save few basic graphs
+# save and show few basic graphs
+# show graphs of all electrodes records as function of the time (each bend in different color)
 create_graph_per_electrode(df=eeg.data, electrode_name='AF7', fig_path=Path(new_path) / 'AF7.png')
 create_graph_per_electrode(df=eeg.data, electrode_name='AF8', fig_path=Path(new_path) / 'AF8.png')
 create_graph_per_electrode(df=eeg.data, electrode_name='TP9', fig_path=Path(new_path) / 'TP9.png')
 create_graph_per_electrode(df=eeg.data, electrode_name='TP10', fig_path=Path(new_path) / 'TP10.png')
 
+# show graphs of all bend records as function of the time (each electrode in different color)
 create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Delta.png')
-create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Alpha.png')
-create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Beta.png')
-create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Theta.png')
-create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Gamma.png')
+create_graph_per_wave(df=eeg.data, wave_length='Alpha', fig_path=Path(new_path) / 'Alpha.png')
+create_graph_per_wave(df=eeg.data, wave_length='Beta', fig_path=Path(new_path) / 'Beta.png')
+create_graph_per_wave(df=eeg.data, wave_length='Theta', fig_path=Path(new_path) / 'Theta.png')
+create_graph_per_wave(df=eeg.data, wave_length='Gamma', fig_path=Path(new_path) / 'Gamma.png')
 
 
 # create a long-form version of the data (which is averaged per second)

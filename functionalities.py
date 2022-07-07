@@ -5,9 +5,11 @@ plt.style.use('default')
 
 
 def create_graph_per_electrode(df, electrode_name, fig_path):
+    # sanity checks
+    # test
     if type(df) != pd.DataFrame:
         raise ValueError('The data frame is not from the correct type!')
-
+    # test
     if electrode_name not in ['AF7', 'AF8', 'TP9', 'TP10']:
         raise ValueError('The name is not valid!')
 
@@ -28,12 +30,13 @@ def create_graph_per_electrode(df, electrode_name, fig_path):
 
 
 def create_graph_per_wave(df, wave_length, fig_path):
+    # sanity checks
+    # test
     if type(df) != pd.DataFrame:
         raise ValueError('The data frame is not from the correct type!')
-
+    # test
     if wave_length not in ['Delta', 'Alpha', 'Beta', 'Theta', 'Gamma']:
         raise ValueError('The name is not valid!')
-
 
     plt.figure(figsize=(16, 8), dpi=150)
     df[wave_length + "_AF7"].plot(label='AF7', color='orange')
@@ -60,6 +63,7 @@ def time_correction(df, avg_reindex_df_path=None):
 
 
 if __name__ == '__main__':
+    # unit tests
     df_path = r"C:\Users\danie\Downloads\small_sample.csv"
     df = pd.read_csv(df_path)
     fig_path_save = r"C:\Users\danie\Downloads\tmp.png"
