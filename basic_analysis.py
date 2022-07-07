@@ -1,9 +1,9 @@
 import numpy as np
 import pandas as pd
+from typing import Union
 import datetime
 import seaborn as sns
 import matplotlib.pyplot as plt
-from muse_eeg import MuseEEG
 
 
 class BasicAnalysis():
@@ -69,20 +69,25 @@ class BasicAnalysis():
         print(f"This muse EEG recording lasted {self.duration} seconds, meaning {str(datetime.timedelta(seconds=self.duration))}")
         return self.duration
     
-    def statistics_powers(self, x="band"):     
-        grouped = self.data.groupby(['sec',x])
+    def statistics_powers(self, rel_idx: str ="band"):     
+        if (rel_idx!="band") & (rel_idx!="electrode"):
+            raise ValueError("The relevant index argument must be 'band' or 'electrode'")
+        grouped = self.data.groupby(['sec',rel_idx])
         mean_grouped = grouped.mean().rename(columns={'power': 'mean'})
         std_grouped = grouped.std().rename(columns={'power': 'std'})
         max_grouped = grouped.max().rename(columns={'power': 'max'})
         df_stats = mean_grouped.join(std_grouped).join(max_grouped)
-        means_plot = sns.lineplot(data = df_stats.reset_index(),x='sec',y='mean',hue=x)
+        means_plot = sns.lineplot(data = df_stats.reset_index(),x='sec',y='mean',hue=rel_idx)
         _ = means_plot.legend(bbox_to_anchor=(1, 1))
         plt.show()
+        print(df_stats)
 
         return df_stats, _
     
-    def highest_band_powers(self,x:int = 2): 
+    def highest_band_powers(self,x:Union[int, float] = 2): 
         #return a df with band-electrode power values that were more than 2 standard deviations above the average for that band-electrode
+        if not isinstance(x, (int, float)):
+            raise TypeError("The threshold coefficient must be an integer or float")
         grouped = self.data.groupby(['electrode','band'])
         mean_grouped = grouped.mean().rename(columns={'power': 'mean'})
         std_grouped = grouped.std().rename(columns={'power': 'std'})
@@ -95,14 +100,18 @@ class BasicAnalysis():
                 if passed.empty == False:
                     result_df = result_df.append(pd.Series(index=passed.index,data=(electrode+'_'+band)))
         result_df = pd.Series(result_df.index.values, index=result_df) 
+        print(result_df)
         return result_df
 
-    def band_significance(self, values = True):
+    def band_significance(self, values: bool = True):
         #return a df with the band and electrode that had the most significant value for each second
+        if not isinstance(values, bool):
+            raise TypeError("The values argument must be a boolean!")
         df = self.data[self.data.groupby(['sec']).transform(lambda x: x == x.max()).astype(bool)].dropna(axis=0)
         if values == False:
             df = df.reset_index().set_index(['sec'])
             df=df.drop(columns='power')
+        print(df)
         return df
     
     def specific_band_most_significant(self):
@@ -123,25 +132,8 @@ class BasicAnalysis():
             sliced_df = df.loc[:,self.rel_electrode,self.rel_band]
             count = len(sliced_df.index)
             print(f"For {count} seconds this electrode,band combo had the most significant power, meaning for {count*100/self.duration} of the recording")
+        print(sliced_df)
         return sliced_df
-    
-"""
-df = pd.read_csv("data.csv")
-df=df[['TimeStamp', 'Delta_TP9', 'Delta_AF7', 'Delta_AF8', 'Delta_TP10', 'Theta_TP9', 'Theta_AF7', 'Theta_AF8', 'Theta_TP10', 'Alpha_TP9', 'Alpha_AF7', 'Alpha_AF8', 'Alpha_TP10', 'Beta_TP9', 'Beta_AF7', 'Beta_AF8', 'Beta_TP10', 'Gamma_TP9', 'Gamma_AF7','Gamma_AF8', 'Gamma_TP10']]
-temp = BasicAnalysis(df)
-print(temp.data)"""
-
-x = MuseEEG()
-x.read_data()
-x.ave_sec()
-
-
-temp = x.data_per_sec
-
-temp = BasicAnalysis(x.data_per_sec,"Alpha")
-df = temp.statistics_powers()
-print(df)
-
 
 
 
