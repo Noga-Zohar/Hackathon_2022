@@ -3,7 +3,7 @@ from muse_eeg import MuseEEG
 from basic_analysis import BasicAnalysis
 from comparative_analysis import ComparativeAnalysis
 from comparative_analysis import InputError
-from .functionalities import *
+from functionalities import *
 from pathlib import Path
 
 from functions import call_muse_eeg
@@ -48,7 +48,10 @@ create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) 
 # it is also possible to use this class for recordings with different bands and electrodes
 
 lf_eeg = BasicAnalysis(eeg.data_per_sec,relevant_band="Alpha",relevant_electrode="TP9")
-lf_egg.new_dir(new_path)
+
+#get access to reults directory
+f_eeg.new_dir(new_path) 
+
 # get information regarding the duration of recording
 lf_eeg.time_info()
 
@@ -80,6 +83,7 @@ lf_eeg.specific_band_most_significant()
 list = []
 prompt = 'How many experiments would you like to test?\n> '
 user_input = input(prompt)
+user_input = int(user_input)
 
 if user_input == 1:
     eeg, new_path = call_muse_eeg()
@@ -87,7 +91,7 @@ if user_input == 1:
 elif user_input >= 2:
     for experiment in range(user_input):
         eeg, new_path = call_muse_eeg()
-        lf_eeg, entry = call_basic_analysis(eeg, new_path)
+        entry = call_basic_analysis(eeg, new_path)
         list.append(entry)
     ca_eeg = call_compare_analysis(list, new_path)
     print(ca_eeg)
