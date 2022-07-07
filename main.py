@@ -1,7 +1,7 @@
 from muse_eeg import MuseEEG
 from basic_analysis import BasicAnalysis
 from comparative_analysis import ComparativeAnalysis
-from .functionalities import *
+from functionalities import *
 from pathlib import Path
 
 #from functions import call_muse_eeg
@@ -22,7 +22,7 @@ eeg.read_data()
 eeg.ave_sec()
 
 # delete the first minute of recorded data (non-valid). Can input specified minutes instead (eeg.data_per_sec)
-#eeg.del_first_min()
+eeg.del_first_min()
 
 # transform Nan rdata values into zeroes (eeg.data_per_sec)
 eeg.na_to_zero()
@@ -50,6 +50,7 @@ create_graph_per_wave(df=eeg.data, wave_length='Gamma', fig_path=Path(new_path) 
 # it is possible (but not mandated) to also input a band and/or electrode of interest
 # it is also possible to use this class for recordings with different bands and electrodes
 lf_eeg = BasicAnalysis(eeg.data_per_sec,relevant_band="Alpha",relevant_electrode="TP9")
+# get access to results directory
 lf_eeg.new_dir(new_path)
 # get information regarding the duration of recording
 lf_eeg.time_info()
@@ -71,18 +72,6 @@ lf_eeg.band_significance()
 # create a df higlighting the seconds in which the band and/or electrode specified where part of the most powerful band-electrode combo
 # # save df to result file under "relevant_peaks.csv"
 lf_eeg.specific_band_most_significant()
-
-# save few basic graphs
-create_graph_per_electrode(df=eeg.data, electrode_name='AF7', fig_path=Path(new_path) / 'AF7.png')
-create_graph_per_electrode(df=eeg.data, electrode_name='AF8', fig_path=Path(new_path) / 'AF8.png')
-create_graph_per_electrode(df=eeg.data, electrode_name='TP9', fig_path=Path(new_path) / 'TP9.png')
-create_graph_per_electrode(df=eeg.data, electrode_name='TP10', fig_path=Path(new_path) / 'TP10.png')
-
-create_graph_per_wave(df=eeg.data, wave_length='Delta', fig_path=Path(new_path) / 'Delta.png')
-create_graph_per_wave(df=eeg.data, wave_length='Alpha', fig_path=Path(new_path) / 'Alpha.png')
-create_graph_per_wave(df=eeg.data, wave_length='Beta', fig_path=Path(new_path) / 'Beta.png')
-create_graph_per_wave(df=eeg.data, wave_length='Theta', fig_path=Path(new_path) / 'Theta.png')
-create_graph_per_wave(df=eeg.data, wave_length='Gamma', fig_path=Path(new_path) / 'Gamma.png')
 
 
 # list for testing ComparativeAnalysis
